@@ -1,25 +1,16 @@
 import * as React from 'react';
-import {createBrowserRouter, RouterProvider} from 'react-router-dom';
-import TeamOverview from './pages/TeamOverview';
-import Teams from './pages/Teams';
-import UserOverview from './pages/UserOverview';
+import {RouterProvider} from 'react-router-dom';
+import {QueryClient, QueryClientProvider} from 'react-query';
+import {routes} from 'routes';
+
+const client = new QueryClient();
 
 const App = () => {
-    var router = createBrowserRouter([
-        {
-            path: '/',
-            element: <Teams />,
-        },
-        {
-            path: '/team/:teamId',
-            element: <TeamOverview />,
-        },
-        {
-            path: '/user/:useId',
-            element: <UserOverview />,
-        },
-    ]);
-    return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={client}>
+      <RouterProvider router={routes} />
+    </QueryClientProvider>
+  );
 };
 
 export default App;
