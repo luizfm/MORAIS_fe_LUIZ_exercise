@@ -22,7 +22,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test:coverage": "CI=true npm test -- --env=jsdom --coverage --collectCoverageFrom=src/**/*.ts",
+    "test:coverage": "CI=true npm test -- --env=jsdom --coverage --collectCoverageFrom=src/**/*.{tsx,ts} --collectCoverageFrom=!src/*.{tsx,ts}",
     "eject": "react-scripts eject",
     "tsc-check": "tsc --noEmit",
     "prettier": "prettier --config ./.prettierrc.json --write './**/*.{js,tsx,ts}'",

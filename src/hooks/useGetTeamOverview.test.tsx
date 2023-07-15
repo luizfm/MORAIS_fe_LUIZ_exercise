@@ -1,5 +1,5 @@
 import {renderHook, waitFor} from '@testing-library/react';
-import {wrapper} from 'tests/utils/createWrapper';
+import {wrapper} from 'utils/tests/createWrapper';
 import {getData} from 'api';
 import {useGetTeamOverview} from './useGetTeamOverview';
 
