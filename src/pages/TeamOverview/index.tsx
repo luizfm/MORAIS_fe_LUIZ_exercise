@@ -14,7 +14,7 @@ const TeamOverview = () => {
     const location = useLocation();
     const {teamId} = useParams();
 
-    const {data, isLoading} = useGetTeamOverview(teamId, Boolean(teamId));
+    const {data, isLoading: isLoadingTeamOverview} = useGetTeamOverview(teamId, Boolean(teamId));
     const teamLeadId = data?.teamLeadId;
     const teamMemberIds = data?.teamMemberIds ?? [];
     const {data: teamLead, isLoading: isTeamLeadLoading} = useGetUserData(
@@ -23,11 +23,12 @@ const TeamOverview = () => {
     );
 
     const teamLeadData = mapTeamLead(teamLead);
+    const isLoading = isLoadingTeamOverview || isTeamLeadLoading;
 
     return (
         <Container>
             <Header title={`Team ${location.state.name}`} />
-            {isLoading || isTeamLeadLoading ? (
+            {isLoading ? (
                 <Spinner />
             ) : (
                 <React.Fragment>
