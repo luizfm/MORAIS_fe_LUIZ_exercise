@@ -6,7 +6,6 @@ import {UserCardContainer} from './styles';
 
 interface UserCardProps {
     id?: string;
-
     hasNavigation?: boolean;
 }
 
@@ -34,7 +33,7 @@ export const UserCard = ({id, hasNavigation}: UserCardProps) => {
 
     return (
         <UserCardContainer
-            data-testid={`cardContainer-${id}`}
+            data-testid={`userCardContainer-${id}`}
             hasNavigation={hasNavigation}
             onClick={onCardClick}
         >

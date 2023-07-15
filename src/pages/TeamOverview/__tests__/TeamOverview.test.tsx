@@ -2,7 +2,7 @@ import React from 'react';
 import {render, screen, waitFor} from '@testing-library/react';
 import {useGetTeamOverview} from 'hooks/useGetTeamOverview';
 import {useGetUserData} from 'hooks/useGetUserData';
-import TeamOverview from '../TeamOverview';
+import TeamOverview from '..';
 
 jest.mock('hooks/useGetTeamOverview');
 jest.mock('hooks/useGetUserData');
@@ -58,5 +58,21 @@ describe('TeamOverview', () => {
         await waitFor(() => {
             expect(screen.queryAllByText('userData')).toHaveLength(4);
         });
+    });
+
+    it('should render loading spinner when it is fetching data', async () => {
+        (useGetTeamOverview as jest.Mock).mockReturnValue({
+            data: {},
+            isLoading: true,
+        });
+
+        (useGetUserData as jest.Mock).mockReturnValue({
+            data: {},
+            isLoading: true,
+        });
+
+        render(<TeamOverview />);
+
+        expect(screen.getByTestId('spinner')).toBeInTheDocument();
     });
 });

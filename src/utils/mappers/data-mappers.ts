@@ -1,13 +1,6 @@
 import {ListItem, Teams, UserData} from 'types';
 
 export const mapTeamLead = (user?: UserData) => {
-  if(!user) {
-    return {
-      columns: [],
-      url: '',
-    };
-  }
-
     const columns = [
         {
             key: 'Team Lead',
@@ -48,13 +41,14 @@ export const mapUser = (user?: UserData) => {
         key: 'Location',
         value: user?.location,
     },
-];
-return {
-    id: user?.id,
-    url: `/user/${user?.id}`,
-    columns,
-    navigationProps: user,
-};
+  ];
+  
+  return {
+      id: user?.id,
+      url: `/user/${user?.id}`,
+      columns,
+      navigationProps: user,
+  };
 };
 
 export const mapTeams = (teams: Teams[]) => {

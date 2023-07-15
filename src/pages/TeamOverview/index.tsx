@@ -24,25 +24,26 @@ const TeamOverview = () => {
 
     const teamLeadData = mapTeamLead(teamLead);
 
-    if (isLoading) {
-        return <Spinner />;
-    }
-
     return (
         <Container>
             <Header title={`Team ${location.state.name}`} />
-            {!isTeamLeadLoading && (
-                <Card
-                    url={teamLeadData.url}
-                    columns={teamLeadData.columns}
-                    navigationProps={teamLeadData.navigationProps}
-                />
+            {isLoading || isTeamLeadLoading ? (
+                <Spinner />
+            ) : (
+                <React.Fragment>
+                    <Card
+                        url={teamLeadData.url}
+                        columns={teamLeadData.columns}
+                        navigationProps={teamLeadData.navigationProps}
+                    />
+
+                    <TeamMembersContainer>
+                        {teamMemberIds?.map(teamMemberId => (
+                            <UserCard key={teamMemberId} id={teamMemberId} hasNavigation />
+                        ))}
+                    </TeamMembersContainer>
+                </React.Fragment>
             )}
-            <TeamMembersContainer>
-                {teamMemberIds?.map(teamMemberId => (
-                    <UserCard key={teamMemberId} id={teamMemberId} hasNavigation />
-                ))}
-            </TeamMembersContainer>
         </Container>
     );
 };
