@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import {useLocation} from 'react-router-dom';
 import {UserData} from 'types';
-import Card from '../components/Card';
-import {Container} from '../components/GlobalComponents';
-import Header from '../components/Header';
+import Card from '../../components/Card';
+import {Container} from '../../components/GlobalComponents';
+import Header from '../../components/Header';
 
 var mapU = (user: UserData) => {
     var columns = [
@@ -27,9 +27,7 @@ const UserOverview = () => {
     const location = useLocation();
     return (
         <Container>
-            <Header
-                title={`User ${location.state.firstName} ${location.state.lastName}`}
-            />
+            <Header title={`User ${location.state.firstName} ${location.state.lastName}`} />
             {mapU(location.state)}
         </Container>
     );

@@ -1,7 +1,9 @@
-import * as React from 'react';
-import {fireEvent, render, screen, waitFor, act} from '@testing-library/react';
-import * as API from '../../api';
-import Teams from '../Teams';
+import React from 'react';
+import {render, screen, waitFor} from '@testing-library/react';
+import Teams from 'pages/Teams';
+import {useGetTeams} from 'hooks/useGetTeams';
+
+jest.mock('hooks/useGetTeams');
 
 jest.mock('react-router-dom', () => ({
     useLocation: () => ({
@@ -29,26 +31,37 @@ describe('Teams', () => {
     });
 
     it('should render spinner while loading', async () => {
-        // TODO - Add code for this test
-    });
-
-    it('should render teams list', async () => {
-        jest.spyOn(API, 'getTeams').mockResolvedValue([
-            {
-                id: '1',
-                name: 'Team1',
-            },
-            {
-                id: '2',
-                name: 'Team2',
-            },
-        ]);
+        (useGetTeams as jest.Mock).mockReturnValue({
+            data: [],
+            isLoading: true,
+        });
 
         render(<Teams />);
 
         await waitFor(() => {
-            expect(screen.getByText('Team1')).toBeInTheDocument();
+            expect(screen.getByTestId('spinner')).toBeInTheDocument();
         });
+    });
+
+    it('should render teams list', () => {
+        (useGetTeams as jest.Mock).mockReturnValue({
+            data: [
+                {
+                    id: '1',
+                    name: 'Team1',
+                },
+                {
+                    id: '2',
+                    name: 'Team2',
+                },
+            ],
+            isLoading: false,
+        });
+
+        render(<Teams />);
+
+        expect(screen.getByText('Team1')).toBeInTheDocument();
         expect(screen.getByText('Team2')).toBeInTheDocument();
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
 });

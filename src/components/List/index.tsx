@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {ListItem} from 'types';
 import Card from '../Card';
 import {Spinner} from '../Spinner';
@@ -15,7 +15,7 @@ const List = ({items, hasNavigation = true, isLoading}: Props) => {
         <Container>
             {isLoading && <Spinner />}
             {!isLoading &&
-                items.map(({url, id, columns, navigationProps}, index) => {
+                items?.map(({url, id, columns, navigationProps}, index) => {
                     return (
                         <Card
                             key={`${id}-${index}`}
