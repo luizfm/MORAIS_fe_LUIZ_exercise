@@ -23,12 +23,3 @@ npm start
 ```
 npm run test
 ```
-
-### what is missed yet?
-
-
-- [x] Add sentry?
-- [x] Add segment for tracking?
-- [ ] Improve UI
-- [ ] Lighthouse?
-- [ ] Bundle check?
