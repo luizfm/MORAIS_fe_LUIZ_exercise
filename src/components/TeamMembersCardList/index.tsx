@@ -1,35 +1,70 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import Card from 'components/Card';
 import {useGetAllTeamMembers} from 'hooks/useGetAllTeamMembers';
-import {mapUsers} from 'utils/mappers/data-mappers';
+import {mapTeamLead, mapUsers} from 'utils/mappers/data-mappers';
+import {Spinner} from 'components/Spinner';
+import {trackEvent} from 'track';
 
 interface TeamMembersCardListProps {
     teamMemberIds: string[];
+    teamLeadId: string;
     searchValue?: string;
+    isLoading: boolean;
 }
 
-const TeamMembersCardList = ({teamMemberIds, searchValue = ''}: TeamMembersCardListProps) => {
-    const {teamMembers, mutation} = useGetAllTeamMembers(teamMemberIds);
-    const teamUsersData = mapUsers({users: teamMembers, searchValue});
+const TeamMembersCardList = ({
+    teamMemberIds,
+    teamLeadId,
+    searchValue = '',
+    isLoading,
+}: TeamMembersCardListProps) => {
+    const {team, isLoading: isLoadingTeam} = useGetAllTeamMembers({
+        teamMemberIds,
+        teamLeadId,
+    });
 
-    useEffect(() => {
-        if (teamMemberIds.length !== teamMembers.length && !mutation.isLoading) {
-            mutation.mutate();
-        }
-        // Mutation can't be put on dependencies array or it will trigger an infinite loop
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [teamMemberIds.length, teamMembers.length]);
+    const teamLeadData = mapTeamLead({user: team?.teamLead, searchValue});
+    const teamUsersData = mapUsers({users: team?.teamMembers, searchValue});
+
+    const isLoadingInfo = isLoadingTeam || isLoading;
 
     return (
         <React.Fragment>
-            {teamUsersData.map(member => (
-                <Card
-                    key={member.id}
-                    url={member.url}
-                    columns={member.columns}
-                    navigationProps={member.navigationProps}
-                />
-            ))}
+            {isLoadingInfo && <Spinner />}
+            {!isLoadingInfo && (
+                <React.Fragment>
+                    {teamLeadData && (
+                        <Card
+                            id={teamLeadId}
+                            url={teamLeadData.url}
+                            columns={teamLeadData.columns}
+                            navigationProps={teamLeadData.navigationProps}
+                            trackEvent={() =>
+                                trackEvent('Team Lead Card Clicked', {
+                                    id: teamLeadData.navigationProps.id,
+                                    name: teamLeadData.navigationProps.displayName,
+                                })
+                            }
+                        />
+                    )}
+
+                    {teamUsersData?.map(member => (
+                        <Card
+                            key={member.id}
+                            id={member.id}
+                            url={member.url}
+                            columns={member.columns}
+                            navigationProps={member.navigationProps}
+                            trackEvent={() =>
+                                trackEvent('Team Member Card Clicked', {
+                                    id: member.navigationProps.id,
+                                    name: member.navigationProps.displayName,
+                                })
+                            }
+                        />
+                    ))}
+                </React.Fragment>
+            )}
         </React.Fragment>
     );
 };

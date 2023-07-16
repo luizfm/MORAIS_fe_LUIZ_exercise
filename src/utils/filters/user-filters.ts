@@ -9,9 +9,9 @@ export const isSearchedUser = (searchValue: string, data: UserData) => {
     return true;
   }
 
-  const firstNameIncludesValue = includesSearchValue(searchValue, data.firstName);
-  const lastNameIncludesValue = includesSearchValue(searchValue, data.lastName);
-  const displayName = includesSearchValue(searchValue, data.displayName);
+  const firstNameIncludesValue = includesSearchValue(searchValue, data?.firstName);
+  const lastNameIncludesValue = includesSearchValue(searchValue, data?.lastName);
+  const displayName = includesSearchValue(searchValue, data?.displayName);
 
   return firstNameIncludesValue || lastNameIncludesValue || displayName;
 };

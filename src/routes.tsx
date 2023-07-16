@@ -14,7 +14,7 @@ export const routes = createBrowserRouter([
         element: <TeamOverview />,
     },
     {
-        path: '/user/:useId',
+        path: '/user/:userId',
         element: <UserOverview />,
     },
 ]);

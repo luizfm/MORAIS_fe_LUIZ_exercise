@@ -1,17 +1,7 @@
-import {act, renderHook} from '@testing-library/react';
+import {renderHook, waitFor} from '@testing-library/react';
 import {wrapper} from 'utils/tests/createWrapper';
 import {getData} from 'api';
 import {useGetAllTeamMembers} from './useGetAllTeamMembers';
-
-const mockMutate = jest.fn();
-
-jest.mock('react-query', () => ({
-    ...jest.requireActual('react-query'),
-    useMutation: () => ({
-        mutate: mockMutate,
-        isSuccess: true,
-    }),
-}));
 
 jest.mock('api', () => ({
     getData: jest.fn(),
@@ -29,14 +19,21 @@ const userData = {
 describe('useGetAllTeamMembers | hook | integration test', () => {
     it('should not trigger hook when enabled is false', async () => {
         (getData as jest.Mock).mockReturnValueOnce(userData);
-        const {result} = renderHook(() => useGetAllTeamMembers(['1', '2']), {
-            wrapper,
+        const {result} = renderHook(
+            () =>
+                useGetAllTeamMembers({teamLeadId: '1', teamMemberIds: ['1', '2'], searchValue: ''}),
+            {
+                wrapper,
+            }
+        );
+
+        await waitFor(() => {
+            expect(result.current.isLoading).toBe(false);
         });
 
-        act(() => {
-            result.current.mutation.mutate();
-        });
+        const {teamLead, teamMembers} = result.current.team;
 
-        expect(mockMutate).toHaveBeenCalled();
+        expect(teamLead).toStrictEqual(userData);
+        expect(teamMembers).toHaveLength(2);
     });
 });

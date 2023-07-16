@@ -1,7 +1,21 @@
 import {ListItem, Teams, UserData} from 'types';
 import {isSearchedUser} from 'utils/filters/user-filters';
 
-export const mapTeamLead = (user?: UserData) => {
+type MapTeamLeadProps = {
+  user?: UserData;
+  searchValue: string
+}
+
+type MapUsersProps = {
+  users: UserData[];
+  searchValue: string
+}
+
+export const mapTeamLead = ({user, searchValue}: MapTeamLeadProps) => {
+    if(!isSearchedUser(searchValue, user)) {
+      return undefined;
+    }
+
     const columns = [
         {
             key: 'Team Lead',
@@ -51,11 +65,6 @@ export const mapUser = (user?: UserData) => {
       navigationProps: user,
   };
 };
-
-type MapUsersProps = {
-  users: UserData[];
-  searchValue: string
-}
 
 export const mapUsers = ({users, searchValue}: MapUsersProps) => {
   return users?.reduce((accumulator, user) => {

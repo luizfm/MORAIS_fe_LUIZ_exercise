@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const FLAG_LIST = {
-    [FlagsEnum.IS_CARD_COMPONENT_APPROACH_ON]: process.env.IS_CARD_COMPONENT_APPROACH_ON,
+    [FlagsEnum.IS_CARD_COMPONENT_APPROACH_ON]: process.env.REACT_APP_IS_CARD_COMPONENT_APPROACH_ON,
 };
 
 export const Flags = ({flag, renderOnMatch, fallback = null}: Props) => {

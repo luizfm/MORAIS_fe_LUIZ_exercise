@@ -1,34 +1,31 @@
 import React from 'react';
-import {useLocation} from 'react-router-dom';
-import {UserData} from 'types';
+import {useParams} from 'react-router-dom';
+import {useGetUserData} from 'hooks/useGetUserData';
+import {mapUser} from 'utils/mappers/data-mappers';
+import {Spinner} from 'components/Spinner';
 import Card from '../../components/Card';
 import {Container} from '../../components/GlobalComponents';
 import Header from '../../components/Header';
 
-var mapU = (user: UserData) => {
-    var columns = [
-        {
-            key: 'Name',
-            value: `${user.firstName} ${user.lastName}`,
-        },
-        {
-            key: 'Display Name',
-            value: user.displayName,
-        },
-        {
-            key: 'Location',
-            value: user.location,
-        },
-    ];
-    return <Card columns={columns} hasNavigation={false} navigationProps={user} />;
-};
-
 const UserOverview = () => {
-    const location = useLocation();
+    const params = useParams();
+    const {data, isLoading} = useGetUserData(params.userId);
+
+    const user = mapUser(data);
+
     return (
         <Container>
-            <Header title={`User ${location.state.firstName} ${location.state.lastName}`} />
-            {mapU(location.state)}
+            {isLoading && <Spinner />}
+            {!isLoading && (
+                <React.Fragment>
+                    <Header title={`User ${data.firstName} ${data.lastName}`} />
+                    <Card
+                        columns={user.columns}
+                        hasNavigation={false}
+                        navigationProps={user.navigationProps}
+                    />
+                </React.Fragment>
+            )}
         </Container>
     );
 };

@@ -26,7 +26,9 @@ npm run test
 
 ### what is missed yet?
 
-- [ ] Fix loadings in /teams/:teamId page for users / teamLead
-- [ ] Add search functionality - Check if it is available on insomnia with queryParams
-- [ ] Add unit tests for them
+
+- [x] Add sentry?
+- [x] Add segment for tracking?
 - [ ] Improve UI
+- [ ] Lighthouse?
+- [ ] Bundle check?

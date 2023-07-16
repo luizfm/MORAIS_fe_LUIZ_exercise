@@ -1,5 +1,6 @@
 import React from 'react';
 import {ListItem} from 'types';
+import {trackEvent} from 'track';
 import Card from '../Card';
 import {Spinner} from '../Spinner';
 import {Container} from './styles';
@@ -24,6 +25,11 @@ const List = ({items, hasNavigation = true, isLoading}: Props) => {
                             navigationProps={navigationProps}
                             hasNavigation={hasNavigation}
                             url={url}
+                            trackEvent={() =>
+                                trackEvent('Team Card Click', {
+                                    id: navigationProps?.id,
+                                })
+                            }
                         />
                     );
                 })}

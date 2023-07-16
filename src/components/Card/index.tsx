@@ -13,9 +13,17 @@ interface Props {
     columns: Columns[];
     hasNavigation?: boolean;
     navigationProps?: UserData | Teams;
+    trackEvent?: () => void;
 }
 
-const Card = ({id, columns, url, hasNavigation = true, navigationProps = null}: Props) => {
+const Card = ({
+    id,
+    columns,
+    url,
+    hasNavigation = true,
+    navigationProps = null,
+    trackEvent,
+}: Props) => {
     const navigate = useNavigate();
 
     const onCardClick = useCallback(
@@ -25,9 +33,10 @@ const Card = ({id, columns, url, hasNavigation = true, navigationProps = null}: 
                     state: navigationProps,
                 });
             }
+            trackEvent?.();
             event.preventDefault();
         },
-        [hasNavigation, navigate, navigationProps, url]
+        [hasNavigation, navigate, navigationProps, url, trackEvent]
     );
 
     return (

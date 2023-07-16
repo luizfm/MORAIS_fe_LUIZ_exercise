@@ -1,12 +1,13 @@
 import React from 'react';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import {useGetTeamOverview} from 'hooks/useGetTeamOverview';
-import {useGetUserData} from 'hooks/useGetUserData';
 import {wrapper} from 'utils/tests/createWrapper';
+import {useGetAllTeamMembers} from 'hooks/useGetAllTeamMembers';
 import TeamOverview from '..';
 
 jest.mock('hooks/useGetTeamOverview');
 jest.mock('hooks/useGetUserData');
+jest.mock('hooks/useGetAllTeamMembers');
 
 jest.mock('react-router-dom', () => ({
     useLocation: () => ({
@@ -35,6 +36,12 @@ const mockedUserData = {
     avatar: '',
 };
 
+const mockedTeamMembers = [
+    mockedUserData,
+    {...mockedUserData, id: '3'},
+    {...mockedUserData, id: '4'},
+];
+
 describe('TeamOverview | component | unit test', () => {
     beforeAll(() => {
         jest.useFakeTimers();
@@ -53,8 +60,11 @@ describe('TeamOverview | component | unit test', () => {
             data: mockedTeamOverviewData,
             isLoading: false,
         });
-        (useGetUserData as jest.Mock).mockReturnValue({
-            data: mockedUserData,
+        (useGetAllTeamMembers as jest.Mock).mockReturnValue({
+            team: {
+                teamLead: mockedUserData,
+                teamMembers: mockedTeamMembers,
+            },
             isLoading: false,
         });
 
@@ -71,8 +81,8 @@ describe('TeamOverview | component | unit test', () => {
             isLoading: true,
         });
 
-        (useGetUserData as jest.Mock).mockReturnValue({
-            data: {},
+        (useGetAllTeamMembers as jest.Mock).mockReturnValue({
+            team: {},
             isLoading: true,
         });
 
@@ -86,10 +96,12 @@ describe('TeamOverview | component | unit test', () => {
             data: mockedTeamOverviewData,
             isLoading: false,
         });
-        (useGetUserData as jest.Mock).mockReturnValue({
-            data: mockedUserData,
+        (useGetAllTeamMembers as jest.Mock).mockReturnValue({
+            team: {
+                teamLead: mockedUserData,
+                teamMembers: mockedTeamMembers,
+            },
             isLoading: false,
-            isSuccess: true,
         });
 
         render(<TeamOverview />, {wrapper});

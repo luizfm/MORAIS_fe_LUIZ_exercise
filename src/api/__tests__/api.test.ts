@@ -1,4 +1,9 @@
 import {getData} from 'api';
+import {captureException} from '@sentry/react';
+
+jest.mock('@sentry/react', () => ({
+  captureException: jest.fn(),
+}));
 
 describe('Api fetcher test', () => {
   it('should render api response with provided path', async() => {
@@ -19,5 +24,12 @@ describe('Api fetcher test', () => {
     const result = await getData();
 
     expect(result).toBeNull();
+  });
+
+  it('should throw an error if promise get reject', async () => {
+    global.fetch = jest.fn().mockImplementationOnce(() => Promise.reject('Not found'));
+   
+    await getData();
+    expect(captureException).toHaveBeenCalled();
   });
 });

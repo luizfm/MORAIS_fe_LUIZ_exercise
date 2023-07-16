@@ -1,26 +1,38 @@
 import React from 'react';
-import {render, screen} from '@testing-library/react';
+import {fireEvent, render, screen} from '@testing-library/react';
+import {trackEvent} from 'track';
 import List from '..';
 
 jest.mock('react-router-dom', () => ({
-    ...(jest.requireActual('react-router-dom') as any),
+    ...jest.requireActual('react-router-dom'),
     useNavigate: () => jest.fn(),
 }));
 
+// const mockedTrackEvent = jest.fn();
+
+jest.mock('track', () => ({
+    trackEvent: jest.fn(),
+}));
+
+const mockedItemsList = [
+    {
+        id: '1',
+        columns: [
+            {
+                key: 'columnKey1',
+                value: 'columnValue1',
+            },
+        ],
+        navigationProps: {
+            id: '1',
+            name: 'John Doe',
+        },
+    },
+];
+
 describe('List', () => {
     it('should render spinner and not render items when it is loading', () => {
-        const items = [
-            {
-                id: '1',
-                columns: [
-                    {
-                        key: 'columnKey1',
-                        value: 'columnValue1',
-                    },
-                ],
-            },
-        ];
-        render(<List isLoading items={items} />);
+        render(<List isLoading items={mockedItemsList} />);
 
         expect(screen.getByTestId('spinner')).toBeInTheDocument();
         expect(screen.queryByTestId('cardContainer')).not.toBeInTheDocument();
@@ -69,5 +81,14 @@ describe('List', () => {
 
         expect(screen.getByTestId('cardContainer-1')).toBeInTheDocument();
         expect(screen.getByTestId('cardContainer-2')).toBeInTheDocument();
+    });
+
+    it('should call track event when card is clicked', async () => {
+        render(<List isLoading={false} items={mockedItemsList} />);
+
+        const card = screen.getByTestId('cardContainer-1');
+        fireEvent.click(card);
+
+        expect(trackEvent).toHaveBeenCalledWith('Team Card Click', {id: '1'});
     });
 });
