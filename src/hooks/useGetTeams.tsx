@@ -2,12 +2,17 @@ import {useQuery} from 'react-query';
 import {getTeams} from 'services/teams';
 import {Teams} from 'types';
 
-export const useGetTeams = () => {
-    const {data, isLoading, error} = useQuery<Teams[]>('teams', getTeams);
+export const useGetTeams = (filter = '') => {
+    const query = useQuery<Teams[]>('teams', getTeams);
 
-    return {
-        data,
-        isLoading,
-        error,
-    };
+    if (filter && query.isSuccess) {
+        return {
+            ...query,
+            data: query.data.filter(team =>
+                team.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
+            ),
+        };
+    }
+
+    return query;
 };

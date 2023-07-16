@@ -27,7 +27,7 @@ describe('UserCard | component | unit test', () => {
             isLoading: false,
         });
 
-        render(<UserCard id={id} />);
+        render(<UserCard searchValue="" id={id} />);
 
         expect(screen.getByTestId(`userCardContainer-${id}`)).toBeInTheDocument();
         expect(screen.getAllByText(/John Doe/i)).toHaveLength(2);
@@ -40,7 +40,7 @@ describe('UserCard | component | unit test', () => {
             isLoading: true,
         });
 
-        render(<UserCard id={id} />);
+        render(<UserCard searchValue="" id={id} />);
 
         expect(screen.queryAllByTestId(`userCardContainer-${id}`)).toHaveLength(0);
     });
@@ -50,9 +50,8 @@ describe('UserCard | component | unit test', () => {
             data: userData,
             isLoading: false,
         });
-        // jest.spyOn(mappers, 'mapUser').mockReturnValue(mappedUserMock);
 
-        render(<UserCard id={id} hasNavigation />);
+        render(<UserCard searchValue="" id={id} hasNavigation />);
 
         const card = screen.getByTestId(`userCardContainer-${id}`);
         fireEvent.click(card);
@@ -65,13 +64,36 @@ describe('UserCard | component | unit test', () => {
             data: userData,
             isLoading: false,
         });
-        // jest.spyOn(mappers, 'mapUser').mockReturnValue(mappedUserMock);
 
-        render(<UserCard id={id} />);
+        render(<UserCard searchValue="" id={id} />);
 
         const card = screen.getByTestId(`userCardContainer-${id}`);
         fireEvent.click(card);
 
         expect(mockedUseNavigate).not.toHaveBeenCalled();
+    });
+
+    it('should not render component if provided searchValue does not match any user name data', () => {
+        (useGetUserData as jest.Mock).mockReturnValue({
+            data: userData,
+            isLoading: false,
+            isSuccess: true,
+        });
+
+        render(<UserCard searchValue="thisValueDoesNotExist" id={id} />);
+
+        expect(screen.queryByTestId(`userCardContainer-${id}`)).not.toBeInTheDocument();
+    });
+
+    it('should render component if searchValue is not provided', () => {
+        (useGetUserData as jest.Mock).mockReturnValue({
+            data: userData,
+            isLoading: false,
+            isSuccess: true,
+        });
+
+        render(<UserCard id={id} />);
+
+        expect(screen.getByTestId(`userCardContainer-${id}`)).toBeInTheDocument();
     });
 });

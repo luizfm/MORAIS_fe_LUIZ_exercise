@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, screen, waitFor} from '@testing-library/react';
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import Teams from 'pages/Teams';
 import {useGetTeams} from 'hooks/useGetTeams';
 
@@ -17,7 +17,18 @@ jest.mock('react-router-dom', () => ({
     useNavigate: () => ({}),
 }));
 
-describe('Teams', () => {
+const mockedTeamData = [
+    {
+        id: '1',
+        name: 'Team1',
+    },
+    {
+        id: '2',
+        name: 'Team2',
+    },
+];
+
+describe('Teams | component | unit test', () => {
     beforeAll(() => {
         jest.useFakeTimers();
     });
@@ -45,16 +56,7 @@ describe('Teams', () => {
 
     it('should render teams list', () => {
         (useGetTeams as jest.Mock).mockReturnValue({
-            data: [
-                {
-                    id: '1',
-                    name: 'Team1',
-                },
-                {
-                    id: '2',
-                    name: 'Team2',
-                },
-            ],
+            data: mockedTeamData,
             isLoading: false,
         });
 
@@ -63,5 +65,30 @@ describe('Teams', () => {
         expect(screen.getByText('Team1')).toBeInTheDocument();
         expect(screen.getByText('Team2')).toBeInTheDocument();
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+
+    it('should render empty results after submit the form', async () => {
+        (useGetTeams as jest.Mock).mockReturnValue({
+            data: mockedTeamData,
+            isLoading: false,
+        });
+
+        render(<Teams />);
+
+        const searchInput = screen.getByRole('searchbox', {name: /search for a team/i});
+
+        fireEvent.input(searchInput, {target: {value: 'userDataTest'}});
+
+        const submitButton = screen.getByTestId('submit-button');
+        fireEvent.click(submitButton);
+
+        await waitFor(() => {
+            (useGetTeams as jest.Mock).mockReturnValue({
+                data: [],
+                isLoading: false,
+            });
+
+            expect(screen.queryAllByText(/Team1/i)).toHaveLength(0);
+        });
     });
 });

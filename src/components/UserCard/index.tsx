@@ -2,16 +2,18 @@ import React, {useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {mapUser} from 'utils/mappers/data-mappers';
 import {useGetUserData} from 'hooks/useGetUserData';
+import {isSearchedUser} from 'utils/filters/user-filters';
 import {UserCardContainer} from './styles';
 
 interface UserCardProps {
     id?: string;
     hasNavigation?: boolean;
+    searchValue?: string;
 }
 
-export const UserCard = ({id, hasNavigation}: UserCardProps) => {
+export const UserCard = ({id, hasNavigation, searchValue = ''}: UserCardProps) => {
     const navigate = useNavigate();
-    const {data, isLoading} = useGetUserData(id);
+    const {data, isLoading, isSuccess} = useGetUserData(id);
 
     const {url, navigationProps, columns} = mapUser(data);
 
@@ -28,6 +30,10 @@ export const UserCard = ({id, hasNavigation}: UserCardProps) => {
     );
 
     if (isLoading) {
+        return null;
+    }
+
+    if (isSuccess && !isLoading && !isSearchedUser(searchValue, data)) {
         return null;
     }
 

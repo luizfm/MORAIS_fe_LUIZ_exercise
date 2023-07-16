@@ -27,6 +27,7 @@ const List = ({items, hasNavigation = true, isLoading}: Props) => {
                         />
                     );
                 })}
+            {items?.length === 0 && <p>There are no results at the moment</p>}
         </Container>
     );
 };

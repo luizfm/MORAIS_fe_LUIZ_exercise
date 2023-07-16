@@ -1,16 +1,31 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useLocation, useParams} from 'react-router-dom';
 import {useGetTeamOverview} from 'hooks/useGetTeamOverview';
 import {useGetUserData} from 'hooks/useGetUserData';
 import {mapTeamLead} from 'utils/mappers/data-mappers';
-import {UserCard} from 'components/UserCard';
 import {Spinner} from 'components/Spinner';
 import {Container} from 'components/GlobalComponents';
 import Header from 'components/Header';
 import Card from 'components/Card';
+import {SearchInput} from 'components/SearchInput';
+import {useForm} from 'react-hook-form';
+import {isSearchedUser} from 'utils/filters/user-filters';
+import {Flags, FlagsEnum} from 'Flags';
+import TeamMembersCardList from 'components/TeamMembersCardList';
+import TeamMembersUserCardList from 'components/TeamMembersUserCardList';
 import {TeamMembersContainer} from './styles';
 
+interface FormData {
+    searchMember: string;
+}
+
 const TeamOverview = () => {
+    const [searchValue, setSearchValue] = useState('');
+    const {register, handleSubmit} = useForm<FormData>({
+        defaultValues: {
+            searchMember: '',
+        },
+    });
     const location = useLocation();
     const {teamId} = useParams();
 
@@ -22,6 +37,10 @@ const TeamOverview = () => {
         Boolean(teamLeadId)
     );
 
+    const onSubmit = handleSubmit((formData: FormData) => {
+        setSearchValue(formData.searchMember);
+    });
+
     const teamLeadData = mapTeamLead(teamLead);
     const isLoading = isLoadingTeamOverview || isTeamLeadLoading;
 
@@ -32,16 +51,37 @@ const TeamOverview = () => {
                 <Spinner />
             ) : (
                 <React.Fragment>
-                    <Card
-                        url={teamLeadData.url}
-                        columns={teamLeadData.columns}
-                        navigationProps={teamLeadData.navigationProps}
-                    />
+                    <form onSubmit={onSubmit}>
+                        <SearchInput
+                            id="searchMember"
+                            label="Search for a member"
+                            {...register('searchMember')}
+                        />
+                    </form>
+                    {isSearchedUser(searchValue, teamLead) && (
+                        <Card
+                            url={teamLeadData.url}
+                            columns={teamLeadData.columns}
+                            navigationProps={teamLeadData.navigationProps}
+                        />
+                    )}
 
                     <TeamMembersContainer>
-                        {teamMemberIds?.map(teamMemberId => (
-                            <UserCard key={teamMemberId} id={teamMemberId} hasNavigation />
-                        ))}
+                        <Flags
+                            flag={FlagsEnum.IS_CARD_COMPONENT_APPROACH_ON}
+                            renderOnMatch={
+                                <TeamMembersCardList
+                                    teamMemberIds={teamMemberIds}
+                                    searchValue={searchValue}
+                                />
+                            }
+                            fallback={
+                                <TeamMembersUserCardList
+                                    teamMemberIds={teamMemberIds}
+                                    searchValue={searchValue}
+                                />
+                            }
+                        />
                     </TeamMembersContainer>
                 </React.Fragment>
             )}

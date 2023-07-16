@@ -8,7 +8,7 @@ jest.mock('api', () => ({
 }));
 
 describe('useGetUserData | hook | integration test', () => {
-    it('should render', async () => {
+    it('should render fetched user data', async () => {
         const userData = {
             id: '371d2ee8-cdf4-48cf-9ddb-04798b79ad9e',
             firstName: 'Randy',
