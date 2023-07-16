@@ -50,7 +50,7 @@ describe('TeamMembersCardList | component | unit test', () => {
             isLoading: false,
         });
 
-        render(<TeamMembersCardList teamLeadId="1" isLoading={false} teamMemberIds={['2', '3']} />);
+        render(<TeamMembersCardList teamLeadId="1" teamMemberIds={['2', '3']} />);
 
         expect(screen.getByText('teamLeadData')).toBeInTheDocument();
         expect(screen.getByText('userData')).toBeInTheDocument();
@@ -66,7 +66,7 @@ describe('TeamMembersCardList | component | unit test', () => {
             isLoading: false,
         });
 
-        render(<TeamMembersCardList teamLeadId="" isLoading teamMemberIds={[]} />);
+        render(<TeamMembersCardList teamLeadId="" teamMemberIds={[]} />);
 
         expect(screen.queryAllByText('teamLeadData')).toHaveLength(0);
         expect(screen.queryAllByText('userData')).toHaveLength(0);
@@ -81,7 +81,6 @@ describe('TeamMembersCardList | component | unit test', () => {
 
         render(
             <TeamMembersCardList
-                isLoading={false}
                 teamLeadId="1"
                 teamMemberIds={['2', '3']}
                 searchValue="otherUser"
@@ -102,7 +101,6 @@ describe('TeamMembersCardList | component | unit test', () => {
         render(
             <TeamMembersCardList
                 teamMemberIds={['2', '3']}
-                isLoading={false}
                 teamLeadId="1"
                 searchValue="otherUserThatDoesNotExist"
             />
@@ -119,7 +117,7 @@ describe('TeamMembersCardList | component | unit test', () => {
             isLoading: false,
         });
 
-        render(<TeamMembersCardList teamLeadId="1" isLoading={false} teamMemberIds={['2', '3']} />);
+        render(<TeamMembersCardList teamLeadId="1" teamMemberIds={['2', '3']} />);
 
         expect(screen.getByText('teamLeadData')).toBeInTheDocument();
         expect(screen.getByText('userData')).toBeInTheDocument();
@@ -140,7 +138,7 @@ describe('TeamMembersCardList | component | unit test', () => {
             isLoading: false,
         });
 
-        render(<TeamMembersCardList teamLeadId="1" isLoading={false} teamMemberIds={['2', '3']} />);
+        render(<TeamMembersCardList teamLeadId="1" teamMemberIds={['2', '3']} />);
 
         expect(screen.getByText('teamLeadData')).toBeInTheDocument();
         expect(screen.getByText('userData')).toBeInTheDocument();
@@ -153,5 +151,19 @@ describe('TeamMembersCardList | component | unit test', () => {
             id: '2',
             name: 'userData',
         });
+    });
+
+    it('should render loader spinner when it is fetching data', () => {
+        (useGetAllTeamMembers as jest.Mock).mockReturnValue({
+            team: teamMembersMock,
+            isLoading: true,
+        });
+
+        render(<TeamMembersCardList teamLeadId="1" teamMemberIds={['2', '3']} />);
+
+        expect(screen.getByTestId('spinner')).toBeInTheDocument();
+        expect(screen.queryAllByText('teamLeadData')).toHaveLength(0);
+        expect(screen.queryAllByText('userData')).toHaveLength(0);
+        expect(screen.queryAllByText('otherUser')).toHaveLength(0);
     });
 });

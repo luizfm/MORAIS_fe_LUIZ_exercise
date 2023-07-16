@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useLocation, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {useGetTeamOverview} from 'hooks/useGetTeamOverview';
 
 import {Container} from 'components/GlobalComponents';
@@ -9,6 +9,7 @@ import {SearchInput} from 'components/SearchInput';
 import {useForm} from 'react-hook-form';
 
 import TeamMembersCardList from 'components/TeamMembersCardList';
+import {Spinner} from 'components/Spinner';
 import {TeamMembersContainer} from './styles';
 
 interface FormData {
@@ -22,7 +23,7 @@ const TeamOverview = () => {
             searchMember: '',
         },
     });
-    const location = useLocation();
+
     const {teamId} = useParams();
 
     const {data, isLoading} = useGetTeamOverview(teamId, Boolean(teamId));
@@ -35,23 +36,28 @@ const TeamOverview = () => {
 
     return (
         <Container>
-            <Header title={`Team ${location.state.name}`} />
-            <form onSubmit={onSubmit}>
-                <SearchInput
-                    id="searchMember"
-                    label="Search for a member"
-                    {...register('searchMember')}
-                />
-            </form>
+            {isLoading && <Spinner />}
+            {!isLoading && (
+                <React.Fragment>
+                    <Header title={`Team ${data?.name}`} />
+                    <form onSubmit={onSubmit}>
+                        <SearchInput
+                            id="searchMember"
+                            label="Search for a member"
+                            placeholder="John Doe..."
+                            {...register('searchMember')}
+                        />
+                    </form>
 
-            <TeamMembersContainer>
-                <TeamMembersCardList
-                    teamMemberIds={teamMemberIds}
-                    teamLeadId={teamLeadId}
-                    searchValue={searchValue}
-                    isLoading={isLoading}
-                />
-            </TeamMembersContainer>
+                    <TeamMembersContainer>
+                        <TeamMembersCardList
+                            teamMemberIds={teamMemberIds}
+                            teamLeadId={teamLeadId}
+                            searchValue={searchValue}
+                        />
+                    </TeamMembersContainer>
+                </React.Fragment>
+            )}
         </Container>
     );
 };

@@ -4,6 +4,6 @@ export const TeamMembersContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin: 20px;
-  align-items: center;
+  column-gap: 21px;
   justify-content: center;
 `;

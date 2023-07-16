@@ -16,7 +16,7 @@ export const SearchInput = forwardRef<HTMLInputElement, Props>(
                 <SearchInputLabel htmlFor={id}>{label}</SearchInputLabel>
                 <InputWrapper>
                     <Input id={id} {...restInputProps} ref={ref} type="search" />
-                    <SubmitButton data-testid="submit-button" type="submit">
+                    <SubmitButton data-testid="submit-button" type="submit" title="submit-button">
                         <MagnifyingGlass size={16} weight="bold" />
                     </SubmitButton>
                 </InputWrapper>

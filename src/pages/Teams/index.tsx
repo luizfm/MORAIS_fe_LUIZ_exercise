@@ -32,6 +32,7 @@ const Teams = () => {
                 <SearchInput
                     id="searchInput"
                     label="Search for a team"
+                    placeholder="Onyx Team..."
                     {...register('searchTeam')}
                 />
             </form>

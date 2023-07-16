@@ -5,6 +5,7 @@ export interface Teams {
 
 export interface TeamOverview {
     id: string;
+    name: string;
     teamLeadId: string;
     teamMemberIds: string[];
 }

@@ -10,11 +10,6 @@ jest.mock('hooks/useGetUserData');
 jest.mock('hooks/useGetAllTeamMembers');
 
 jest.mock('react-router-dom', () => ({
-    useLocation: () => ({
-        state: {
-            name: 'Some Team',
-        },
-    }),
     useNavigate: () => ({}),
     useParams: () => ({
         teamId: '1',

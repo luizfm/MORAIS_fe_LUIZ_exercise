@@ -1,5 +1,6 @@
 import React, {useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {ArrowLeft} from '@phosphor-icons/react';
 import {HeaderContainer, NavigationHeader, BackButton, Title} from './styles';
 
 interface Props {
@@ -17,7 +18,11 @@ const Header = ({title, showBackButton = true}: Props) => {
     return (
         <HeaderContainer>
             <NavigationHeader>
-                {showBackButton && <BackButton onClick={onBackButtonClick}>🔙</BackButton>}
+                {showBackButton && (
+                    <BackButton onClick={onBackButtonClick}>
+                        <ArrowLeft size={24} weight="bold" />
+                    </BackButton>
+                )}
                 <Title>{title}</Title>
             </NavigationHeader>
         </HeaderContainer>

@@ -9,16 +9,14 @@ interface TeamMembersCardListProps {
     teamMemberIds: string[];
     teamLeadId: string;
     searchValue?: string;
-    isLoading: boolean;
 }
 
 const TeamMembersCardList = ({
     teamMemberIds,
     teamLeadId,
     searchValue = '',
-    isLoading,
 }: TeamMembersCardListProps) => {
-    const {team, isLoading: isLoadingTeam} = useGetAllTeamMembers({
+    const {team, isLoading} = useGetAllTeamMembers({
         teamMemberIds,
         teamLeadId,
     });
@@ -26,12 +24,10 @@ const TeamMembersCardList = ({
     const teamLeadData = mapTeamLead({user: team?.teamLead, searchValue});
     const teamUsersData = mapUsers({users: team?.teamMembers, searchValue});
 
-    const isLoadingInfo = isLoadingTeam || isLoading;
-
     return (
         <React.Fragment>
-            {isLoadingInfo && <Spinner />}
-            {!isLoadingInfo && (
+            {isLoading && <Spinner />}
+            {!isLoading && (
                 <React.Fragment>
                     {teamLeadData && (
                         <Card
