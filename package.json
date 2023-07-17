@@ -24,7 +24,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll",
     "test:coverage": "CI=true npm test -- --env=jsdom --coverage",
     "eject": "react-scripts eject",
     "tsc-check": "tsc --noEmit",
