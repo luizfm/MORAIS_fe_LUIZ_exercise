@@ -77,18 +77,14 @@ describe('Teams | component | unit test', () => {
 
         const searchInput = screen.getByRole('searchbox', {name: /search for a team/i});
 
-        fireEvent.input(searchInput, {target: {value: 'userDataTest'}});
+        fireEvent.input(searchInput, {target: {value: 'Team2'}});
 
         const submitButton = screen.getByTestId('submit-button');
         fireEvent.click(submitButton);
 
         await waitFor(() => {
-            (useGetTeams as jest.Mock).mockReturnValue({
-                data: [],
-                isLoading: false,
-            });
-
             expect(screen.queryAllByText(/Team1/i)).toHaveLength(0);
         });
+        expect(screen.queryAllByText(/Team2/i)).toHaveLength(1);
     });
 });

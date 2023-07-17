@@ -1,14 +1,19 @@
-import {ListItem, Teams, UserData} from 'types';
-import {isSearchedUser} from 'utils/filters/user-filters';
+import {Teams, UserData} from 'types';
+import {includesSearchValue, isSearchedUser} from 'utils/filters/user-filters';
+
+type MapTeamProps = {
+  teams?: Teams[];
+  searchValue: string;
+}
 
 type MapTeamLeadProps = {
   user?: UserData;
-  searchValue: string
+  searchValue: string;
 }
 
 type MapUsersProps = {
   users: UserData[];
-  searchValue: string
+  searchValue: string;
 }
 
 export const mapTeamLead = ({user, searchValue}: MapTeamLeadProps) => {
@@ -99,19 +104,25 @@ export const mapUsers = ({users, searchValue}: MapUsersProps) => {
   }, []);
 };
 
-export const mapTeams = (teams: Teams[]) => {
-  return teams?.map(team => {
-      var columns = [
-          {
-              key: 'Name',
-              value: team.name,
-          },
-      ];
-      return {
-          id: team.id,
-          url: `/team/${team.id}`,
-          columns,
-          navigationProps: team,
-      } as ListItem;
-  });
+export const mapTeams = ({teams, searchValue}: MapTeamProps) => {
+  return teams?.reduce((accumulator, team) => {
+    if(!includesSearchValue(searchValue, team.name)) {
+      return accumulator;
+    }
+    
+    const columns = [
+      {
+          key: 'Name',
+          value: team.name,
+      },
+    ];
+    accumulator.push({
+        id: team.id,
+        url: `/team/${team.id}`,
+        columns,
+        navigationProps: team,
+    });
+
+    return accumulator;
+  }, []);
 };

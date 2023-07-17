@@ -8,8 +8,6 @@ jest.mock('react-router-dom', () => ({
     useNavigate: () => jest.fn(),
 }));
 
-// const mockedTrackEvent = jest.fn();
-
 jest.mock('track', () => ({
     trackEvent: jest.fn(),
 }));
@@ -30,7 +28,7 @@ const mockedItemsList = [
     },
 ];
 
-describe('List', () => {
+describe('List | component | unit test', () => {
     it('should render spinner and not render items when it is loading', () => {
         render(<List isLoading items={mockedItemsList} />);
 

@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Teams, UserData} from 'types';
-import {CardDataContainer, Container} from './styles';
+import {Container} from './styles';
 
 type Columns = {
     key: string;
@@ -45,13 +45,11 @@ const Card = ({
             hasNavigation={hasNavigation}
             onClick={onCardClick}
         >
-            <CardDataContainer>
-                {columns.map(({key: columnKey, value}) => (
-                    <p key={columnKey}>
-                        <strong>{columnKey}</strong>&nbsp;{value}
-                    </p>
-                ))}
-            </CardDataContainer>
+            {columns.map(({key: columnKey, value}) => (
+                <p key={columnKey}>
+                    <strong>{columnKey}</strong>&nbsp;{value}
+                </p>
+            ))}
         </Container>
     );
 };

@@ -50,24 +50,4 @@ describe('useGetTeams | hook | integration test', () => {
 
         expect(result.current.data).toBe(teams);
     });
-
-    it('should render filtered data based on hook filter prop', async () => {
-        (getData as jest.Mock).mockReturnValueOnce(teams);
-        const {result} = renderHook(() => useGetTeams('Ordinary'), {
-            wrapper,
-        });
-
-        await waitFor(
-            () => {
-                expect(result.current.isLoading).toBe(false);
-            },
-            {
-                interval: 10000,
-            }
-        );
-
-        const [ordinaryTeam] = teams;
-
-        expect(result.current.data).toStrictEqual([ordinaryTeam]);
-    });
 });

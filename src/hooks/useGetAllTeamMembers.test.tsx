@@ -20,8 +20,7 @@ describe('useGetAllTeamMembers | hook | integration test', () => {
     it('should not trigger hook when enabled is false', async () => {
         (getData as jest.Mock).mockReturnValueOnce(userData);
         const {result} = renderHook(
-            () =>
-                useGetAllTeamMembers({teamLeadId: '1', teamMemberIds: ['1', '2'], searchValue: ''}),
+            () => useGetAllTeamMembers({teamLeadId: '1', teamMemberIds: ['1', '2']}),
             {
                 wrapper,
             }

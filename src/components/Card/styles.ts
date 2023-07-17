@@ -13,7 +13,6 @@ export const Container = styled.div<{hasNavigation: boolean}>`
     max-height: 200px;
     cursor: default;
     margin: 5px;
-    transition: all 0.2s ease-in-out;
 
     ${props => (props.hasNavigation && css`
       cursor:pointer;
@@ -23,8 +22,4 @@ export const Container = styled.div<{hasNavigation: boolean}>`
         transform: scale(1.1);
       }
     `)}
-`;
-
-export const CardDataContainer = styled.div`
-  
 `;

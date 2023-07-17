@@ -19,7 +19,7 @@ const Teams = () => {
         },
     });
 
-    const {data: teams, isLoading} = useGetTeams(searchValue);
+    const {data: teams, isLoading} = useGetTeams();
 
     const onSubmit = handleSubmit((formData: FormData) => {
         setSearchValue(formData.searchTeam);
@@ -36,7 +36,7 @@ const Teams = () => {
                     {...register('searchTeam')}
                 />
             </form>
-            <List items={mapTeams(teams)} isLoading={isLoading} />
+            <List items={mapTeams({teams, searchValue})} isLoading={isLoading} />
         </Container>
     );
 };

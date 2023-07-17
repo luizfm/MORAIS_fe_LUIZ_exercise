@@ -1,6 +1,6 @@
 import {UserData} from 'types';
 
-const includesSearchValue = (searchValue: string, value: string) => {
+export const includesSearchValue = (searchValue: string, value: string) => {
   return value.toLowerCase().includes(searchValue.toLowerCase());
 };
 
