@@ -1,5 +1,5 @@
 import {renderHook, waitFor} from '@testing-library/react';
-import {wrapper} from 'utils/tests/createWrapper';
+import {createWrapper} from 'utils/tests/createWrapper';
 import {getData} from 'api';
 import {useGetTeams} from './useGetTeams';
 
@@ -41,7 +41,7 @@ describe('useGetTeams | hook | integration test', () => {
     it('should render fetched teams data', async () => {
         (getData as jest.Mock).mockReturnValueOnce(teams);
         const {result} = renderHook(() => useGetTeams(), {
-            wrapper,
+            wrapper: createWrapper({}),
         });
 
         await waitFor(() => {

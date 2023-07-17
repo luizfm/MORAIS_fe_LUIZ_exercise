@@ -1,7 +1,7 @@
 import React from 'react';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import {useGetTeamOverview} from 'hooks/useGetTeamOverview';
-import {wrapper} from 'utils/tests/createWrapper';
+import {createWrapper} from 'utils/tests/createWrapper';
 import {useGetAllTeamMembers} from 'hooks/useGetAllTeamMembers';
 import TeamOverview from '..';
 
@@ -10,6 +10,7 @@ jest.mock('hooks/useGetUserData');
 jest.mock('hooks/useGetAllTeamMembers');
 
 jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
     useNavigate: () => ({}),
     useParams: () => ({
         teamId: '1',
@@ -63,7 +64,7 @@ describe('TeamOverview | component | unit test', () => {
             isLoading: false,
         });
 
-        render(<TeamOverview />, {wrapper});
+        render(<TeamOverview />, {wrapper: createWrapper({})});
 
         await waitFor(() => {
             expect(screen.queryAllByText('userData')).toHaveLength(4);
@@ -81,7 +82,7 @@ describe('TeamOverview | component | unit test', () => {
             isLoading: true,
         });
 
-        render(<TeamOverview />, {wrapper});
+        render(<TeamOverview />, {wrapper: createWrapper({})});
 
         expect(screen.getByTestId('spinner')).toBeInTheDocument();
     });
@@ -99,7 +100,7 @@ describe('TeamOverview | component | unit test', () => {
             isLoading: false,
         });
 
-        render(<TeamOverview />, {wrapper});
+        render(<TeamOverview />, {wrapper: createWrapper({})});
 
         const searchInput = screen.getByRole('searchbox', {name: /search for a member/i});
 

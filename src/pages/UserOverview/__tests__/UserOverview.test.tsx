@@ -1,9 +1,11 @@
 import React from 'react';
 import {render, screen} from '@testing-library/react';
 import {useGetUserData} from 'hooks/useGetUserData';
+import {createWrapper} from 'utils/tests/createWrapper';
 import UserOverview from '..';
 
 jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
     useNavigate: () => ({}),
     useParams: () => ({
         userId: '1',
@@ -27,7 +29,7 @@ describe('UserOverview | component | unit test', () => {
             isLoading: false,
         });
 
-        render(<UserOverview />);
+        render(<UserOverview />, {wrapper: createWrapper({})});
 
         expect(screen.getByText('Test User')).toBeInTheDocument();
         expect(screen.getByText('userName')).toBeInTheDocument();
@@ -40,7 +42,7 @@ describe('UserOverview | component | unit test', () => {
             isLoading: true,
         });
 
-        render(<UserOverview />);
+        render(<UserOverview />, {wrapper: createWrapper({})});
 
         expect(screen.getByTestId('spinner')).toBeInTheDocument();
         expect(screen.queryAllByText('Test User')).toHaveLength(0);

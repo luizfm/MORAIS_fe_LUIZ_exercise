@@ -1,5 +1,5 @@
 import {renderHook, waitFor} from '@testing-library/react';
-import {wrapper} from 'utils/tests/createWrapper';
+import {createWrapper} from 'utils/tests/createWrapper';
 import {getData} from 'api';
 import {useGetAllTeamMembers} from './useGetAllTeamMembers';
 
@@ -22,7 +22,7 @@ describe('useGetAllTeamMembers | hook | integration test', () => {
         const {result} = renderHook(
             () => useGetAllTeamMembers({teamLeadId: '1', teamMemberIds: ['1', '2']}),
             {
-                wrapper,
+                wrapper: createWrapper({}),
             }
         );
 

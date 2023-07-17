@@ -2,10 +2,12 @@ import React from 'react';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import Teams from 'pages/Teams';
 import {useGetTeams} from 'hooks/useGetTeams';
+import {createWrapper} from 'utils/tests/createWrapper';
 
 jest.mock('hooks/useGetTeams');
 
 jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
     useLocation: () => ({
         state: {
             firstName: 'Test',
@@ -47,7 +49,7 @@ describe('Teams | component | unit test', () => {
             isLoading: true,
         });
 
-        render(<Teams />);
+        render(<Teams />, {wrapper: createWrapper({})});
 
         await waitFor(() => {
             expect(screen.getByTestId('spinner')).toBeInTheDocument();
@@ -60,7 +62,7 @@ describe('Teams | component | unit test', () => {
             isLoading: false,
         });
 
-        render(<Teams />);
+        render(<Teams />, {wrapper: createWrapper({})});
 
         expect(screen.getByText('Team1')).toBeInTheDocument();
         expect(screen.getByText('Team2')).toBeInTheDocument();
@@ -73,7 +75,7 @@ describe('Teams | component | unit test', () => {
             isLoading: false,
         });
 
-        render(<Teams />);
+        render(<Teams />, {wrapper: createWrapper({})});
 
         const searchInput = screen.getByRole('searchbox', {name: /search for a team/i});
 

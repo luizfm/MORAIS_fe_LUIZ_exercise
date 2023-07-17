@@ -1,5 +1,5 @@
 import {renderHook, waitFor} from '@testing-library/react';
-import {wrapper} from 'utils/tests/createWrapper';
+import {createWrapper} from 'utils/tests/createWrapper';
 import {getData} from 'api';
 import {useGetUserData} from './useGetUserData';
 
@@ -19,7 +19,7 @@ describe('useGetUserData | hook | integration test', () => {
         };
         (getData as jest.Mock).mockReturnValueOnce(userData);
         const {result} = renderHook(() => useGetUserData(userData.id), {
-            wrapper,
+            wrapper: createWrapper({}),
         });
 
         await waitFor(() => {

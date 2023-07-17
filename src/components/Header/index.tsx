@@ -19,7 +19,7 @@ const Header = ({title, showBackButton = true}: Props) => {
         <HeaderContainer>
             <NavigationHeader>
                 {showBackButton && (
-                    <BackButton onClick={onBackButtonClick}>
+                    <BackButton onClick={onBackButtonClick} title="back-button">
                         <ArrowLeft size={24} weight="bold" />
                     </BackButton>
                 )}

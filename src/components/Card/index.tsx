@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
-import {useNavigate} from 'react-router-dom';
 import {Teams, UserData} from 'types';
-import {Container} from './styles';
+import {Link} from 'react-router-dom';
+import {CardLink, Container} from './styles';
 
 type Columns = {
     key: string;
@@ -24,32 +24,24 @@ const Card = ({
     navigationProps = null,
     trackEvent,
 }: Props) => {
-    const navigate = useNavigate();
-
-    const onCardClick = useCallback(
-        (event: React.MouseEvent<HTMLElement>) => {
-            if (hasNavigation) {
-                navigate(url, {
-                    state: navigationProps,
-                });
-            }
-            trackEvent?.();
-            event.preventDefault();
-        },
-        [hasNavigation, navigate, navigationProps, url, trackEvent]
-    );
+    const onCardClick = useCallback(() => {
+        trackEvent?.();
+    }, [trackEvent]);
 
     return (
-        <Container
-            data-testid={`cardContainer-${id}`}
-            hasNavigation={hasNavigation}
-            onClick={onCardClick}
-        >
-            {columns.map(({key: columnKey, value}) => (
-                <p key={columnKey}>
-                    <strong>{columnKey}</strong>&nbsp;{value}
-                </p>
-            ))}
+        <Container hasNavigation={hasNavigation}>
+            <CardLink
+                data-testid={`cardContainer-${id}`}
+                to={url}
+                onClick={onCardClick}
+                state={navigationProps}
+            >
+                {columns.map(({key: columnKey, value}) => (
+                    <p key={columnKey}>
+                        <strong>{columnKey}</strong>&nbsp;{value}
+                    </p>
+                ))}
+            </CardLink>
         </Container>
     );
 };

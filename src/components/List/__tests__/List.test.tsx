@@ -1,6 +1,7 @@
 import React from 'react';
 import {fireEvent, render, screen} from '@testing-library/react';
 import {trackEvent} from 'track';
+import {createWrapper} from 'utils/tests/createWrapper';
 import List from '..';
 
 jest.mock('react-router-dom', () => ({
@@ -30,7 +31,9 @@ const mockedItemsList = [
 
 describe('List | component | unit test', () => {
     it('should render spinner and not render items when it is loading', () => {
-        render(<List isLoading items={mockedItemsList} />);
+        render(<List isLoading items={mockedItemsList} />, {
+            wrapper: createWrapper({}),
+        });
 
         expect(screen.getByTestId('spinner')).toBeInTheDocument();
         expect(screen.queryByTestId('cardContainer')).not.toBeInTheDocument();
@@ -48,7 +51,9 @@ describe('List | component | unit test', () => {
                 ],
             },
         ];
-        render(<List isLoading={false} items={items} />);
+        render(<List isLoading={false} items={items} />, {
+            wrapper: createWrapper({}),
+        });
 
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
         expect(screen.getByTestId('cardContainer-1')).toBeInTheDocument();
@@ -75,14 +80,18 @@ describe('List | component | unit test', () => {
                 ],
             },
         ];
-        render(<List isLoading={false} items={items} />);
+        render(<List isLoading={false} items={items} />, {
+            wrapper: createWrapper({}),
+        });
 
         expect(screen.getByTestId('cardContainer-1')).toBeInTheDocument();
         expect(screen.getByTestId('cardContainer-2')).toBeInTheDocument();
     });
 
     it('should call track event when card is clicked', async () => {
-        render(<List isLoading={false} items={mockedItemsList} />);
+        render(<List isLoading={false} items={mockedItemsList} />, {
+            wrapper: createWrapper({}),
+        });
 
         const card = screen.getByTestId('cardContainer-1');
         fireEvent.click(card);

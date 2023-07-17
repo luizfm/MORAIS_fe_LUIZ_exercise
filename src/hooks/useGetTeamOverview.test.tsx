@@ -1,5 +1,5 @@
 import {renderHook, waitFor} from '@testing-library/react';
-import {wrapper} from 'utils/tests/createWrapper';
+import {createWrapper} from 'utils/tests/createWrapper';
 import {getData} from 'api';
 import {useGetTeamOverview} from './useGetTeamOverview';
 
@@ -17,7 +17,7 @@ describe('useGetTeamOverview | hook | integration test', () => {
     it('should not trigger hook when enabled is false', async () => {
         (getData as jest.Mock).mockReturnValueOnce(mockedTeamOverview);
         const {result} = renderHook(() => useGetTeamOverview('1'), {
-            wrapper,
+            wrapper: createWrapper({}),
         });
 
         await waitFor(() => {
@@ -30,7 +30,7 @@ describe('useGetTeamOverview | hook | integration test', () => {
     it('should render team overview with provided team id', async () => {
         (getData as jest.Mock).mockReturnValueOnce(mockedTeamOverview);
         const {result} = renderHook(() => useGetTeamOverview('1', true), {
-            wrapper,
+            wrapper: createWrapper({}),
         });
 
         await waitFor(() => {

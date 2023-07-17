@@ -2,11 +2,13 @@ import React from 'react';
 import {fireEvent, render, screen} from '@testing-library/react';
 import {useGetAllTeamMembers} from 'hooks/useGetAllTeamMembers';
 import {trackEvent} from 'track';
+import {createWrapper} from 'utils/tests/createWrapper';
 import TeamMembersCardList from '..';
 
 jest.mock('hooks/useGetAllTeamMembers');
 
 jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
     useNavigate: () => jest.fn(),
 }));
 
@@ -50,7 +52,9 @@ describe('TeamMembersCardList | component | unit test', () => {
             isLoading: false,
         });
 
-        render(<TeamMembersCardList teamLeadId="1" teamMemberIds={['2', '3']} />);
+        render(<TeamMembersCardList teamLeadId="1" teamMemberIds={['2', '3']} />, {
+            wrapper: createWrapper({}),
+        });
 
         expect(screen.getByText('teamLeadData')).toBeInTheDocument();
         expect(screen.getByText('userData')).toBeInTheDocument();
@@ -66,7 +70,9 @@ describe('TeamMembersCardList | component | unit test', () => {
             isLoading: false,
         });
 
-        render(<TeamMembersCardList teamLeadId="" teamMemberIds={[]} />);
+        render(<TeamMembersCardList teamLeadId="" teamMemberIds={[]} />, {
+            wrapper: createWrapper({}),
+        });
 
         expect(screen.queryAllByText('teamLeadData')).toHaveLength(0);
         expect(screen.queryAllByText('userData')).toHaveLength(0);
@@ -84,7 +90,8 @@ describe('TeamMembersCardList | component | unit test', () => {
                 teamLeadId="1"
                 teamMemberIds={['2', '3']}
                 searchValue="otherUser"
-            />
+            />,
+            {wrapper: createWrapper({})}
         );
 
         expect(screen.queryAllByText('teamLeadData')).toHaveLength(0);
@@ -103,7 +110,8 @@ describe('TeamMembersCardList | component | unit test', () => {
                 teamMemberIds={['2', '3']}
                 teamLeadId="1"
                 searchValue="otherUserThatDoesNotExist"
-            />
+            />,
+            {wrapper: createWrapper({})}
         );
 
         expect(screen.queryAllByText('teamLeadData')).toHaveLength(0);
@@ -117,7 +125,9 @@ describe('TeamMembersCardList | component | unit test', () => {
             isLoading: false,
         });
 
-        render(<TeamMembersCardList teamLeadId="1" teamMemberIds={['2', '3']} />);
+        render(<TeamMembersCardList teamLeadId="1" teamMemberIds={['2', '3']} />, {
+            wrapper: createWrapper({}),
+        });
 
         expect(screen.getByText('teamLeadData')).toBeInTheDocument();
         expect(screen.getByText('userData')).toBeInTheDocument();
@@ -138,7 +148,9 @@ describe('TeamMembersCardList | component | unit test', () => {
             isLoading: false,
         });
 
-        render(<TeamMembersCardList teamLeadId="1" teamMemberIds={['2', '3']} />);
+        render(<TeamMembersCardList teamLeadId="1" teamMemberIds={['2', '3']} />, {
+            wrapper: createWrapper({}),
+        });
 
         expect(screen.getByText('teamLeadData')).toBeInTheDocument();
         expect(screen.getByText('userData')).toBeInTheDocument();
@@ -159,7 +171,9 @@ describe('TeamMembersCardList | component | unit test', () => {
             isLoading: true,
         });
 
-        render(<TeamMembersCardList teamLeadId="1" teamMemberIds={['2', '3']} />);
+        render(<TeamMembersCardList teamLeadId="1" teamMemberIds={['2', '3']} />, {
+            wrapper: createWrapper({}),
+        });
 
         expect(screen.getByTestId('spinner')).toBeInTheDocument();
         expect(screen.queryAllByText('teamLeadData')).toHaveLength(0);

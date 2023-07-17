@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es2020",
     "baseUrl": "src",
     "noImplicitAny": false,
-    "module": "esnext",
+    "module": "ES2020",
     "jsx": "react",
     "allowJs": true,
     "moduleResolution": "node",
