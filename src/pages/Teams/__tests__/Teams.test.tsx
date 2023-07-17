@@ -3,20 +3,14 @@ import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import Teams from 'pages/Teams';
 import {useGetTeams} from 'hooks/useGetTeams';
 import {createWrapper} from 'utils/tests/createWrapper';
+import {useLocation} from 'react-router-dom';
 
 jest.mock('hooks/useGetTeams');
 
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
-    useLocation: () => ({
-        state: {
-            firstName: 'Test',
-            lastName: 'User',
-            displayName: 'userName',
-            location: 'location',
-        },
-    }),
-    useNavigate: () => ({}),
+    useLocation: jest.fn(),
+    useNavigate: () => jest.fn(),
 }));
 
 const mockedTeamData = [
@@ -41,6 +35,18 @@ describe('Teams | component | unit test', () => {
 
     afterAll(() => {
         jest.useRealTimers();
+    });
+
+    beforeEach(() => {
+        (useLocation as jest.Mock).mockReturnValue({
+            search: '',
+            state: {
+                firstName: 'Test',
+                lastName: 'User',
+                displayName: 'userName',
+                location: 'location',
+            },
+        });
     });
 
     it('should render spinner while loading', async () => {

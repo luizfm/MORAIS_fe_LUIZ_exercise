@@ -10,6 +10,7 @@ import {useForm} from 'react-hook-form';
 
 import TeamMembersCardList from 'components/TeamMembersCardList';
 import {Spinner} from 'components/Spinner';
+import {useFilterParams} from 'hooks/useFilterParams';
 import {TeamMembersContainer} from './styles';
 
 interface FormData {
@@ -17,10 +18,11 @@ interface FormData {
 }
 
 const TeamOverview = () => {
-    const [searchValue, setSearchValue] = useState('');
+    const {setUrlParams, getParam} = useFilterParams();
+    const [searchValue, setSearchValue] = useState(getParam('name'));
     const {register, handleSubmit} = useForm<FormData>({
         defaultValues: {
-            searchMember: '',
+            searchMember: getParam('name'),
         },
     });
 
@@ -32,6 +34,7 @@ const TeamOverview = () => {
 
     const onSubmit = handleSubmit((formData: FormData) => {
         setSearchValue(formData.searchMember);
+        setUrlParams(formData.searchMember, 'name');
     });
 
     return (

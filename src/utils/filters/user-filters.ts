@@ -1,7 +1,7 @@
 import {UserData} from 'types';
 
 export const includesSearchValue = (searchValue: string, value: string) => {
-  return value.toLowerCase().includes(searchValue.toLowerCase());
+  return value?.toLowerCase().includes(searchValue?.toLowerCase());
 };
 
 export const isSearchedUser = (searchValue: string, data: UserData) => {

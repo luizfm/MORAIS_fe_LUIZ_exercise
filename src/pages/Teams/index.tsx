@@ -3,6 +3,7 @@ import {useGetTeams} from 'hooks/useGetTeams';
 import {mapTeams} from 'utils/mappers/data-mappers';
 import {useForm} from 'react-hook-form';
 import {SearchInput} from 'components/SearchInput';
+import {useFilterParams} from 'hooks/useFilterParams';
 import Header from '../../components/Header';
 import List from '../../components/List';
 import {Container} from '../../components/GlobalComponents';
@@ -12,10 +13,12 @@ interface FormData {
 }
 
 const Teams = () => {
-    const [searchValue, setSearchValue] = useState('');
+    const {setUrlParams, getParam} = useFilterParams();
+
+    const [searchValue, setSearchValue] = useState(getParam('name'));
     const {register, handleSubmit} = useForm<FormData>({
         defaultValues: {
-            searchTeam: '',
+            searchTeam: getParam('name'),
         },
     });
 
@@ -23,6 +26,7 @@ const Teams = () => {
 
     const onSubmit = handleSubmit((formData: FormData) => {
         setSearchValue(formData.searchTeam);
+        setUrlParams(formData.searchTeam, 'name');
     });
 
     return (

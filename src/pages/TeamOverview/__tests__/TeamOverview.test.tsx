@@ -3,6 +3,7 @@ import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import {useGetTeamOverview} from 'hooks/useGetTeamOverview';
 import {createWrapper} from 'utils/tests/createWrapper';
 import {useGetAllTeamMembers} from 'hooks/useGetAllTeamMembers';
+import {useLocation} from 'react-router-dom';
 import TeamOverview from '..';
 
 jest.mock('hooks/useGetTeamOverview');
@@ -11,10 +12,11 @@ jest.mock('hooks/useGetAllTeamMembers');
 
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
-    useNavigate: () => ({}),
+    useNavigate: () => jest.fn(),
     useParams: () => ({
         teamId: '1',
     }),
+    useLocation: jest.fn(),
 }));
 
 const mockedTeamOverviewData = {
@@ -49,6 +51,11 @@ describe('TeamOverview | component | unit test', () => {
 
     afterAll(() => {
         jest.useRealTimers();
+    });
+    beforeEach(() => {
+        (useLocation as jest.Mock).mockReturnValue({
+            search: '',
+        });
     });
 
     it('should render team overview users', async () => {
