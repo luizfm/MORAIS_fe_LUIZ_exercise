@@ -1,25 +1,27 @@
-import * as React from 'react';
-import {createBrowserRouter, RouterProvider} from 'react-router-dom';
-import TeamOverview from './pages/TeamOverview';
-import Teams from './pages/Teams';
-import UserOverview from './pages/UserOverview';
+import React from 'react';
+import {RouterProvider} from 'react-router-dom';
+import {QueryClient, QueryClientProvider} from 'react-query';
+import {routes} from 'routes';
+import {ReactQueryDevtools} from 'react-query/devtools';
+
+const client = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 1000 * 60 * 10, // 10 minutes
+            refetchOnWindowFocus: false,
+        },
+    },
+});
 
 const App = () => {
-    var router = createBrowserRouter([
-        {
-            path: '/',
-            element: <Teams />,
-        },
-        {
-            path: '/team/:teamId',
-            element: <TeamOverview />,
-        },
-        {
-            path: '/user/:useId',
-            element: <UserOverview />,
-        },
-    ]);
-    return <RouterProvider router={router} />;
+    return (
+        <QueryClientProvider client={client}>
+            <main>
+                <RouterProvider router={routes} />
+            </main>
+            <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+    );
 };
 
 export default App;

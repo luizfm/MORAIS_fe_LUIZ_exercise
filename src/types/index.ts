@@ -5,6 +5,7 @@ export interface Teams {
 
 export interface TeamOverview {
     id: string;
+    name: string;
     teamLeadId: string;
     teamMemberIds: string[];
 }
@@ -26,6 +27,6 @@ export interface ListItemColumn {
 export interface ListItem {
     id: string;
     url?: string;
-    columns: Array<ListItemColumn>;
+    columns: ListItemColumn[];
     navigationProps?: UserData | Teams;
 }

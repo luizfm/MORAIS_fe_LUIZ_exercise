@@ -1,17 +1,18 @@
-import * as React from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, {useCallback} from 'react';
 import {Teams, UserData} from 'types';
-import {Container} from './styles';
+import {CardLink, Container} from './styles';
 
+type Columns = {
+    key: string;
+    value: string;
+};
 interface Props {
     id?: string;
     url?: string;
-    columns: Array<{
-        key: string;
-        value: string;
-    }>;
+    columns: Columns[];
     hasNavigation?: boolean;
     navigationProps?: UserData | Teams;
+    trackEvent?: () => void;
 }
 
 const Card = ({
@@ -20,27 +21,26 @@ const Card = ({
     url,
     hasNavigation = true,
     navigationProps = null,
-}: Props): JSX.Element => {
-    const navigate = useNavigate();
+    trackEvent,
+}: Props) => {
+    const onCardClick = useCallback(() => {
+        trackEvent?.();
+    }, [trackEvent]);
 
     return (
-        <Container
-            data-testid={`cardContainer-${id}`}
-            hasNavigation={hasNavigation}
-            onClick={(e: Event) => {
-                if (hasNavigation) {
-                    navigate(url, {
-                        state: navigationProps,
-                    });
-                }
-                e.preventDefault();
-            }}
-        >
-            {columns.map(({key: columnKey, value}) => (
-                <p key={columnKey}>
-                    <strong>{columnKey}</strong>&nbsp;{value}
-                </p>
-            ))}
+        <Container hasNavigation={hasNavigation}>
+            <CardLink
+                data-testid={`cardContainer-${id}`}
+                to={url}
+                onClick={onCardClick}
+                state={navigationProps}
+            >
+                {columns.map(({key: columnKey, value}) => (
+                    <p key={columnKey}>
+                        <strong>{columnKey}</strong>&nbsp;{value}
+                    </p>
+                ))}
+            </CardLink>
         </Container>
     );
 };

@@ -1,26 +1,39 @@
 import React from 'react';
-import {render, screen} from '@testing-library/react';
+import {fireEvent, render, screen} from '@testing-library/react';
+import {trackEvent} from 'track';
+import {createWrapper} from 'utils/tests/createWrapper';
 import List from '..';
 
 jest.mock('react-router-dom', () => ({
-    ...(jest.requireActual('react-router-dom') as any),
+    ...jest.requireActual('react-router-dom'),
     useNavigate: () => jest.fn(),
 }));
 
-describe('List', () => {
-    it('should render spinner and not render items when it is loading', () => {
-        const items = [
+jest.mock('track', () => ({
+    trackEvent: jest.fn(),
+}));
+
+const mockedItemsList = [
+    {
+        id: '1',
+        columns: [
             {
-                id: '1',
-                columns: [
-                    {
-                        key: 'columnKey1',
-                        value: 'columnValue1',
-                    },
-                ],
+                key: 'columnKey1',
+                value: 'columnValue1',
             },
-        ];
-        render(<List isLoading items={items} />);
+        ],
+        navigationProps: {
+            id: '1',
+            name: 'John Doe',
+        },
+    },
+];
+
+describe('List | component | unit test', () => {
+    it('should render spinner and not render items when it is loading', () => {
+        render(<List isLoading items={mockedItemsList} />, {
+            wrapper: createWrapper({}),
+        });
 
         expect(screen.getByTestId('spinner')).toBeInTheDocument();
         expect(screen.queryByTestId('cardContainer')).not.toBeInTheDocument();
@@ -38,7 +51,9 @@ describe('List', () => {
                 ],
             },
         ];
-        render(<List isLoading={false} items={items} />);
+        render(<List isLoading={false} items={items} />, {
+            wrapper: createWrapper({}),
+        });
 
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
         expect(screen.getByTestId('cardContainer-1')).toBeInTheDocument();
@@ -65,9 +80,22 @@ describe('List', () => {
                 ],
             },
         ];
-        render(<List isLoading={false} items={items} />);
+        render(<List isLoading={false} items={items} />, {
+            wrapper: createWrapper({}),
+        });
 
         expect(screen.getByTestId('cardContainer-1')).toBeInTheDocument();
         expect(screen.getByTestId('cardContainer-2')).toBeInTheDocument();
+    });
+
+    it('should call track event when card is clicked', async () => {
+        render(<List isLoading={false} items={mockedItemsList} />, {
+            wrapper: createWrapper({}),
+        });
+
+        const card = screen.getByTestId('cardContainer-1');
+        fireEvent.click(card);
+
+        expect(trackEvent).toHaveBeenCalledWith('Team Card Click', {id: '1'});
     });
 });

@@ -1,9 +1,14 @@
 import React from 'react';
 import {fireEvent, render, screen} from '@testing-library/react';
-import {Teams} from 'types';
+import {createWrapper} from 'utils/tests/createWrapper';
 import Card from '..';
 
 const mockUseNavigate = jest.fn();
+const mockedTrackEvent = jest.fn();
+
+jest.mock('track', () => ({
+    trackEvent: () => mockedTrackEvent,
+}));
 
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
@@ -12,21 +17,25 @@ jest.mock('react-router-dom', () => ({
 
 describe('Card', () => {
     it('should render card with single column', () => {
-        var columns = [{key: 'columnKey', value: 'columnValue'}];
-        render(<Card columns={columns} />);
+        const columns = [{key: 'columnKey', value: 'columnValue'}];
+        render(<Card columns={columns} />, {
+            wrapper: createWrapper({}),
+        });
 
         expect(screen.getByText('columnKey')).toBeInTheDocument();
         expect(screen.getByText('columnValue')).toBeInTheDocument();
     });
 
     it('should render card with multiple columns', () => {
-        var columns = [
+        const columns = [
             {key: 'columnKey1', value: 'columnValue1'},
             {key: 'columnKey2', value: 'columnValue2'},
             {key: 'columnKey3', value: 'columnValue3'},
             {key: 'columnKey4', value: ''},
         ];
-        render(<Card columns={columns} />);
+        render(<Card columns={columns} />, {
+            wrapper: createWrapper({}),
+        });
 
         expect(screen.getByText('columnKey1')).toBeInTheDocument();
         expect(screen.getByText('columnValue1')).toBeInTheDocument();
@@ -37,29 +46,20 @@ describe('Card', () => {
         expect(screen.getByText('columnKey4')).toBeInTheDocument();
     });
 
-    it('should navigate when card is clicked and navigation is enabled', () => {
-        const navProps = {
-            id: '1',
-            name: 'Team 1',
-        } as Teams;
+    it('should call tracker on card click', async () => {
         render(
             <Card
                 columns={[{key: 'columnKey', value: 'columnValue'}]}
-                url="path"
-                navigationProps={navProps}
-            />
+                url="/path"
+                trackEvent={mockedTrackEvent}
+            />,
+            {
+                wrapper: createWrapper({path: '/path '}),
+            }
         );
 
         fireEvent.click(screen.getByText('columnKey'));
 
-        expect(mockUseNavigate).toHaveBeenCalledWith('path', {state: navProps});
-    });
-
-    it('should not navigate when card is clicked and navigation is disabled', () => {
-        render(<Card columns={[{key: 'columnKey', value: 'columnValue'}]} hasNavigation={false} />);
-
-        fireEvent.click(screen.getByText('columnKey'));
-
-        expect(mockUseNavigate).not.toHaveBeenCalled();
+        expect(mockedTrackEvent).toHaveBeenCalled();
     });
 });
