@@ -1,6 +1,5 @@
 import React, {useCallback} from 'react';
 import {Teams, UserData} from 'types';
-import {Link} from 'react-router-dom';
 import {CardLink, Container} from './styles';
 
 type Columns = {
