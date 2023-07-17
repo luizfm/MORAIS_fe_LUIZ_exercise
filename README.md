@@ -34,7 +34,7 @@ All generated files report will be at the output of `coverage/lcov-report` </br>
 Here it is also possible to check a table of coverage by openning the file `index.html` on the folder mentioned above on your browser.
 
 Below there is an image showing the last coverage report of the application:
-![Screenshot 2023-07-16 at 20 04 11](https://github.com/luizfm/MORAIS_fe_LUIZ_exercise/assets/45155140/819056cf-19d1-40cf-878c-e525d339e043)
+![Screenshot 2023-07-16 at 22 27 50](https://github.com/luizfm/MORAIS_fe_LUIZ_exercise/assets/45155140/4a370562-fc6f-4806-ba39-90d0a078c98a)
 
 
 ## Env variables
@@ -47,7 +47,8 @@ Get the provided `sentry_dns` and pass it url as value of the env variable REACT
 
 Below, there is an image example of the captured events errors in the application.
 
-![Screenshot 2023-07-16 at 19 56 31](https://github.com/luizfm/MORAIS_fe_LUIZ_exercise/assets/45155140/ab6bfe45-5216-454f-806e-c9534556a978)
+![Screenshot 2023-07-16 at 22 27 19](https://github.com/luizfm/MORAIS_fe_LUIZ_exercise/assets/45155140/8c5c838f-a8ba-4c6b-8403-da5c0f9d0bc0)
+
 
 
 The DNS env varible I'm using in this project is the below one:
@@ -61,7 +62,8 @@ You should be able to see API Keys option on the screen. Click on it and get you
 
 Below there is an image showing what events I've trackecd while coding this challenge:
 
-![Screenshot 2023-07-16 at 20 02 36](https://github.com/luizfm/MORAIS_fe_LUIZ_exercise/assets/45155140/4c09c900-de78-48f7-a8b6-b87e817c7980)
+![Screenshot 2023-07-16 at 22 26 54](https://github.com/luizfm/MORAIS_fe_LUIZ_exercise/assets/45155140/b1cd82d0-f7d7-4f73-b1d9-65bfa284554f)
+
 
 The Segment Write Key env varible I'm using in this project is the below one:
 REACT_APP_SEGMENT_KEY=SAvF8OKIuzYvYuR7T6oZleavWBFgG63W
